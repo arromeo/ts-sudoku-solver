@@ -1,11 +1,13 @@
 import React from 'react'
 
+type ChangeHandler = (e: React.ChangeEvent, row?: number, column?: number) => void
+
 interface CellProps {
   row: number
   column: number
-  block: number
   value: string
   valid: boolean
+  onchange: ChangeHandler
 }
 
 export const Cell: React.FunctionComponent<CellProps> = props => {
@@ -16,7 +18,7 @@ export const Cell: React.FunctionComponent<CellProps> = props => {
     (props.row === 2 || props.row === 5 ? ' section-floor' : '') +
     (!props.valid ? ' invalid' : '')
 
-  return <input type="text" className={classList} value={props.value} />
+  return <input type="text" className={classList} value={props.value} onChange={props.onchange} />
 }
 
 export default Cell

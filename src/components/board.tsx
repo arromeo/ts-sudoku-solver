@@ -23,21 +23,32 @@ type State = Readonly<typeof initialState>
 export class InputBoard extends React.Component<object, State> {
   readonly state: State = initialState
 
+  handleChange(
+    event: React.ChangeEvent,
+    row: number | undefined,
+    column: number | undefined
+  ) {
+
+    console.log('Attempting to change row ' + row + ' column ' + column)
+  }
+
   render() {
     return (
       <div className="board">
         {this.state.board.map((row, rowNumber) => {
           return (
-            <div className="row">
-              {row.map((cell, cellNumber) => {
+            <div key={rowNumber} className="row">
+              {row.map((value, columnNumber) => {
                 return (
                   <Cell
-                    key={rowNumber + '-' + cellNumber}
+                    key={rowNumber + '-' + columnNumber}
                     row={rowNumber}
-                    column={cellNumber}
-                    block={1}
-                    value={cell}
+                    column={columnNumber}
+                    value={value}
                     valid={true}
+                    onchange={(e) =>
+                      this.handleChange(e, rowNumber, columnNumber)
+                    }
                   />
                 )
               })}
