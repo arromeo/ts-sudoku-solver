@@ -26,8 +26,15 @@ export class InputBoard extends React.Component<object, State> {
     row: number,
     column: number
   ) {
-    console.log(event.target.value)
-    console.log('Attempting to change row ' + row + ' column ' + column)
+    const newValue = event.target.value
+    //TODO: board.get(row) is failing TypeScript compiling with strictNullChecks
+    //      activated. Figure out how to set it up correctly so it can be turned
+    //      back on.
+    this.setState(({ board }) => {
+      return {
+        board: board.set(row, board.get(row).set(column, newValue)),
+      }
+    })
   }
 
   render() {
