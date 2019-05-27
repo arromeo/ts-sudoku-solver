@@ -24,11 +24,11 @@ export class InputBoard extends React.Component<object, State> {
   readonly state: State = initialState
 
   handleChange(
-    event: React.ChangeEvent,
-    row: number | undefined,
-    column: number | undefined
+    event: React.ChangeEvent<HTMLInputElement>,
+    row: number,
+    column: number
   ) {
-
+    console.log(event.target.value)
     console.log('Attempting to change row ' + row + ' column ' + column)
   }
 
@@ -46,7 +46,7 @@ export class InputBoard extends React.Component<object, State> {
                     column={columnNumber}
                     value={value}
                     valid={true}
-                    onchange={(e) =>
+                    onchange={e =>
                       this.handleChange(e, rowNumber, columnNumber)
                     }
                   />
