@@ -1,21 +1,19 @@
 import React from 'react'
-
+import { List } from 'immutable'
 import Cell from './cell'
 
-function boardGenerator(): string[][] {
-  let board: string[][] = []
-  for (let row = 0; row < 9; row++) {
-    board.push([])
-    for (let cell = 0; cell < 9; cell++) {
-      board[row].push('')
-    }
-  }
-
-  return board
-}
-
 const initialState = {
-  board: boardGenerator(),
+  board: List([
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+  ]),
 }
 
 type State = Readonly<typeof initialState>
