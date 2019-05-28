@@ -14,40 +14,10 @@ const initialState = {
     List(['', '', '', '', '', '', '', '', '']),
     List(['', '', '', '', '', '', '', '', '']),
   ]),
-  validation: Map({
-    row: List([
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-    ]),
-    column: List([
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-    ]),
-    block: List([
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-      List([]),
-    ]),
+  invalid: Map({
+    row: List([]),
+    column: List([]),
+    block: List([]),
   }),
 }
 
@@ -79,11 +49,47 @@ export class InputBoard extends React.Component<object, State> {
     //TODO: board.get(row) is failing TypeScript compiling with strictNullChecks
     //      activated. Figure out how to set it up correctly so it can be turned
     //      back on.
-    this.setState(({ board }) => {
-      return {
-        board: board.set(row, board.get(row).set(column, newValue)),
+    this.setState(
+      ({ board }) => {
+        return {
+          board: board.set(row, board.get(row).set(column, newValue)),
+        }
+      },
+      () => {
+        this.updateValidation()
       }
-    })
+    )
+  }
+
+  updateValidation() {
+    // Row validation.
+    for (let row = 0; row < 9; row++) {
+      let rowArr = this.state.board.get(row).toJS()
+      for (let column = 0; column < 9; column++) {
+        if (rowArr[column] !== '') {
+          if (rowArr.indexOf(rowArr[column]) !== column) {
+            console.log('invalid row')
+          }
+        }
+      }
+    }
+
+    // Column validation.
+    for (let column = 0; column < 9; column++) {
+      let columnArr: string[] = []
+      for (let row = 0; row < 9; row++) {
+        let testValue = this.state.board.get(row).get(column)
+        if (testValue !== '') {
+          if (columnArr.includes(testValue) === false) {
+            columnArr.push(this.state.board.get(row).get(column))
+          } else {
+            console.log('invalide column ')
+          }
+        }
+      }
+    }
+
+    // Block validation.
   }
 
   render() {
