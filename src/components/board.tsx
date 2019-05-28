@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Map } from 'immutable'
+import { List, Map, Set } from 'immutable'
 import * as BlockHelpers from '../utils/blockHelpers'
 import Cell from './cell'
 
@@ -16,9 +16,9 @@ const initialState = {
     List(['', '', '', '', '', '', '', '', '']),
   ]),
   invalid: Map({
-    row: List([]),
-    column: List([]),
-    block: List([]),
+    row: Set<number>([]),
+    column: Set<number>([]),
+    block: Set<number>([]),
   }),
 }
 
@@ -63,6 +63,22 @@ export class InputBoard extends React.Component<object, State> {
   }
 
   updateValidation() {
+    this.setState(({ invalid }) => {
+      return {
+        invalid: invalid.set('row', invalid.get('row').clear()),
+      }
+    })
+    this.setState(({ invalid }) => {
+      return {
+        invalid: invalid.set('column', invalid.get('column').clear()),
+      }
+    })
+    this.setState(({ invalid }) => {
+      return {
+        invalid: invalid.set('block', invalid.get('block').clear()),
+      }
+    })
+
     // Row validation.
     for (let row = 0; row < 9; row++) {
       let rowArr = this.state.board.get(row).toJS()
@@ -72,11 +88,11 @@ export class InputBoard extends React.Component<object, State> {
             this.setState(
               ({ invalid }) => {
                 return {
-                  invalid: invalid.set('row', invalid.get('row').push(row)),
+                  invalid: invalid.set('row', invalid.get('row').add(row)),
                 }
               },
               () => {
-                console.log('invalid row set')
+                console.log(this.state.invalid.get('row').toJS())
               }
             )
           }
@@ -98,12 +114,12 @@ export class InputBoard extends React.Component<object, State> {
                 return {
                   invalid: invalid.set(
                     'column',
-                    invalid.get('column').push(column)
+                    invalid.get('column').add(column)
                   ),
                 }
               },
               () => {
-                console.log('invalid column set')
+                console.log(this.state.invalid.get('column').toJS())
               }
             )
           }
@@ -127,12 +143,12 @@ export class InputBoard extends React.Component<object, State> {
                 return {
                   invalid: invalid.set(
                     'block',
-                    invalid.get('block').push(block)
+                    invalid.get('block').add(block)
                   ),
                 }
               },
               () => {
-                console.log('invalid block set')
+                console.log(this.state.invalid.get('block').toJS())
               }
             )
           }
