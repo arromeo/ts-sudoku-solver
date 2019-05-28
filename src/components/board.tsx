@@ -69,7 +69,16 @@ export class InputBoard extends React.Component<object, State> {
       for (let column = 0; column < 9; column++) {
         if (rowArr[column] !== '') {
           if (rowArr.indexOf(rowArr[column]) !== column) {
-            console.log('invalid row')
+            this.setState(
+              ({ invalid }) => {
+                return {
+                  invalid: invalid.set('row', invalid.get('row').push(row)),
+                }
+              },
+              () => {
+                console.log('invalid row set')
+              }
+            )
           }
         }
       }
@@ -82,15 +91,54 @@ export class InputBoard extends React.Component<object, State> {
         let testValue = this.state.board.get(row).get(column)
         if (testValue !== '') {
           if (columnArr.includes(testValue) === false) {
-            columnArr.push(this.state.board.get(row).get(column))
+            columnArr.push(testValue)
           } else {
-            console.log('invalide column ')
+            this.setState(
+              ({ invalid }) => {
+                return {
+                  invalid: invalid.set(
+                    'column',
+                    invalid.get('column').push(column)
+                  ),
+                }
+              },
+              () => {
+                console.log('invalid column set')
+              }
+            )
           }
         }
       }
     }
 
     // Block validation.
+    for (let block = 0; block < 9; block++) {
+      let blockArr: string[] = []
+      for (let position = 0; position < 9; position++) {
+        let row = BlockHelpers.blockToRow(block, position)
+        let column = BlockHelpers.blockToColumn(block, position)
+        let testValue = this.state.board.get(row).get(column)
+        if (testValue !== '') {
+          if (blockArr.includes(testValue) === false) {
+            blockArr.push(testValue)
+          } else {
+            this.setState(
+              ({ invalid }) => {
+                return {
+                  invalid: invalid.set(
+                    'block',
+                    invalid.get('block').push(block)
+                  ),
+                }
+              },
+              () => {
+                console.log('invalid block set')
+              }
+            )
+          }
+        }
+      }
+    }
   }
 
   render() {
