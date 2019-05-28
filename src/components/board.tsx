@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Map, Set } from 'immutable'
+import { List, Map, Set, fromJS } from 'immutable'
 import * as BlockHelpers from '../utils/blockHelpers'
 import Cell from './cell'
 
@@ -16,9 +16,9 @@ const initialState = {
     List(['', '', '', '', '', '', '', '', '']),
   ]),
   invalid: Map({
-    row: Set<number>([]),
-    column: Set<number>([]),
-    block: Set<number>([]),
+    row: Set([]),
+    column: Set([]),
+    block: Set([]),
   }),
 }
 
@@ -63,20 +63,9 @@ export class InputBoard extends React.Component<object, State> {
   }
 
   updateValidation() {
-    this.setState(({ invalid }) => {
-      return {
-        invalid: invalid.set('row', invalid.get('row').clear()),
-      }
-    })
-    this.setState(({ invalid }) => {
-      return {
-        invalid: invalid.set('column', invalid.get('column').clear()),
-      }
-    })
-    this.setState(({ invalid }) => {
-      return {
-        invalid: invalid.set('block', invalid.get('block').clear()),
-      }
+    // Resets the invalid rows, columns and blocks for revalidation
+    this.setState({
+      invalid: fromJS(initialState.invalid)
     })
 
     // Row validation.
