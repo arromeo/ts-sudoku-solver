@@ -65,7 +65,7 @@ export class InputBoard extends React.Component<object, State> {
   updateValidation() {
     // Resets the invalid rows, columns and blocks for revalidation
     this.setState({
-      invalid: fromJS(initialState.invalid)
+      invalid: fromJS(initialState.invalid),
     })
 
     // Row validation.
@@ -146,6 +146,17 @@ export class InputBoard extends React.Component<object, State> {
     }
   }
 
+  // Returns whether the cell is valid
+  isCellValid(row: number, column: number): boolean {
+    return (
+      !this.state.invalid.get('row').includes(row) &&
+      !this.state.invalid.get('column').includes(column) &&
+      !this.state.invalid
+        .get('block')
+        .includes(BlockHelpers.positionToBlock(row, column))
+    )
+  }
+
   render() {
     return (
       <form className="board">
@@ -159,7 +170,7 @@ export class InputBoard extends React.Component<object, State> {
                     row={rowNumber}
                     column={columnNumber}
                     value={value}
-                    valid={true}
+                    valid={this.isCellValid(rowNumber, columnNumber)}
                     onchange={e =>
                       this.handleChange(e, rowNumber, columnNumber)
                     }
