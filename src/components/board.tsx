@@ -1,5 +1,6 @@
 import React from 'react'
 import { List, Map } from 'immutable'
+import * as BlockHelpers from '../utils/blockHelpers'
 import Cell from './cell'
 
 const initialState = {
