@@ -1,44 +1,30 @@
 /*
- * The board history keeps a record of changes made to both the main board
- * and the possibility boards. If the solver chooses between two paths, it sets
- * a special history item with the branch value set to true. If the branch is
- * found to be unsolvable, it works backwards through the history, undo-ing
- * its changes until it hits a different branch. If it hits the beginning of
- * the queue, there are no more branches to explore and the board is deemed
- * unsolvable.
+ * The board history keeps an array of functions to undo changes made by the
+ * solver when a branch is found to be unsolvabled. If the history array is
+ * exhausted, the entire board is determined to be unsolvable.
  */
 
-export interface HistoryItem {
-  row: number
-  column: number
-  value: number
-  branch: boolean
-}
+export type HistoryFunction = () => void
 
 export class BoardHistory {
-  private history: HistoryItem[]
+  private history: HistoryFunction[]
 
   constructor() {
     this.history = []
   }
 
-  // Adds an item to the history queue.
-  public add(
-    row: number,
-    column: number,
-    value: number,
-    branch: boolean
-  ): void {
-    this.history.push({
-      row,
-      column,
-      value,
-      branch,
-    })
+  // Adds a single item to the history array.
+  public add(callback: HistoryFunction) {
+    this.history.push(callback)
   }
 
-  // Returns the most recent item or undefined if it has reached the end of queue
-  public get(): HistoryItem | undefined {
+  // Adds a list of history items to the history array.
+  public merge(historyItems: HistoryFunction[]) {
+    historyItems.forEach(item => this.add(item))
+  }
+
+  // Returns the most recent item or undefined if array exhausted.
+  public get(): HistoryFunction | undefined {
     return this.history.pop()
   }
 }

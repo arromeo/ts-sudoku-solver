@@ -1,54 +1,158 @@
 import { PossibilityBoard } from './Board'
-import { SolveTable, SolveTableItem } from './SolveTable'
+import { HistoryFunction } from './BoardHistory'
+import * as BlockHelpers from '../utils/blockHelpers'
+
+export type BoardUnit = 'row' | 'column' | 'block'
+
+export interface SolvableItem {
+  value: number
+  unitType: BoardUnit
+  unitValue: number
+  solutions: number[]
+}
 
 export class SolveMatrix {
-  private solveTable: SolveTable
   private matrix: PossibilityBoard[]
 
   constructor() {
-    this.solveTable = new SolveTable()
     this.matrix = []
     for (let i = 0; i < 9; i++) {
       this.matrix.push(new PossibilityBoard())
     }
   }
 
-  public add(row: number, column: number, value: number): void {
-    this.matrix[value - 1].add(row, column)
-    this.rerun()
-  }
+  public add(row: number, column: number, value: number): HistoryFunction[] {
+    const history: HistoryFunction[] = []
+    const block = BlockHelpers.positionToBlock(row, column)
 
-  public remove(row: number, column: number, value: number): void {
-    this.matrix[value - 1].remove(row, column)
-  }
-
-  public rerun(): void {
-    let hits: number[] = []
-    console.log('hitting this')
-
-    for (let value = 0; value < 9; value++) {
-      this.matrix[value].board.forEach((row, rowNumber) => {
-        row.forEach((value, cell) => {
-          if (value === 1) {
-            hits.push(cell)
-          }
-        })
-
-        if (hits.length === 1 || hits.length === 2) {
-          console.log('Narrowed down ' + value)
-          this.solveTable.add({
-            value,
-            unit: 'row',
-            unitNumber: rowNumber,
-            score: hits.length,
-            positions: hits,
-          })
-        }
-      })
+    // Sets the cell as unusable in every board
+    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+      const result: HistoryFunction | undefined = this.matrix[boardNumber].add(
+        row,
+        column
+      )
+      if (result !== undefined) {
+        history.push(result)
+      }
     }
+
+    // Sets the row of the incoming value as unusable
+    for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
+      const result: HistoryFunction | undefined = this.matrix[value].add(
+        row,
+        columnNumber
+      )
+      if (result !== undefined) {
+        history.push(result)
+      }
+    }
+
+    // Sets the column of the incoming value as unusable
+    for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
+      const result: HistoryFunction | undefined = this.matrix[value].add(
+        rowNumber,
+        column
+      )
+      if (result !== undefined) {
+        history.push(result)
+      }
+    }
+
+    // Sets the block of the incoming value as unusable
+    for (let blockPosition = 0; blockPosition < 9; blockPosition++) {
+      const result: HistoryFunction | undefined = this.matrix[value].add(
+        BlockHelpers.blockToRow(block, blockPosition),
+        BlockHelpers.blockToColumn(block, blockPosition)
+      )
+      if (result !== undefined) {
+        history.push(result)
+      }
+    }
+
+    return history
   }
 
-  public getSolveTableItem(): SolveTableItem | undefined {
-    return this.solveTable.get()
+  public getSolvableItem(): SolvableItem {
+    // Attempting to locate a row, column or block with one possible spot
+    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+      for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
+        let hits: number[] = []
+        for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
+          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
+            hits.push(columnNumber)
+            if (hits.length > 1) {
+              break
+            }
+          }
+        }
+
+        if (hits.length === 1) {
+          return {
+            value: boardNumber,
+            unitType: 'row',
+            unitValue: rowNumber,
+            solutions: hits,
+          }
+        }
+      }
+    }
+
+    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+      for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
+        let hits: number[] = []
+        for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
+          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
+            hits.push(rowNumber)
+            if (hits.length > 1) {
+              break
+            }
+          }
+        }
+
+        if (hits.length === 1) {
+          return {
+            value: boardNumber,
+            unitType: 'column',
+            unitValue: columnNumber,
+            solutions: hits,
+          }
+        }
+      }
+    }
+
+    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+      for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
+        let hits: number[] = []
+        for (let positionNumber = 0; positionNumber < 9; positionNumber++) {
+          if (
+            this.matrix[boardNumber].board[
+              BlockHelpers.blockToRow(blockNumber, positionNumber)
+            ][BlockHelpers.blockToColumn(blockNumber, positionNumber)] === 1
+          ) {
+            hits.push(positionNumber)
+            if (hits.length > 1) {
+              break
+            }
+          }
+        }
+
+        if (hits.length === 1) {
+          console.log(
+            'Value: ' +
+              boardNumber +
+              ' Block: ' +
+              blockNumber +
+              ' Position: ' +
+              hits[0]
+          )
+          return {
+            value: boardNumber,
+            unitType: 'block',
+            unitValue: blockNumber,
+            solutions: hits,
+          }
+        }
+      }
+    }
   }
 }

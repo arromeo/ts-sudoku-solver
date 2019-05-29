@@ -68,7 +68,7 @@ export class InputBoard extends React.Component<object, State> {
     event.preventDefault()
     const board = this.state.board.toJS()
     const solver = new SudokuSolver()
-    console.log(solver.solve(board))
+    solver.solve(board)
   }
 
   updateValidation(): void {
