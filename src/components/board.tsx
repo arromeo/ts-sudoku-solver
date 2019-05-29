@@ -2,6 +2,7 @@ import React from 'react'
 import { List, Map, Set, fromJS } from 'immutable'
 import * as BlockHelpers from '../utils/blockHelpers'
 import Cell from './cell'
+import { SudokuSolver } from '../SudokuSolver/SudokuSolver'
 
 const initialState = {
   board: List([
@@ -20,6 +21,7 @@ const initialState = {
     column: Set([]),
     block: Set([]),
   }),
+  isValid: true,
 }
 
 type State = Readonly<typeof initialState>
@@ -62,10 +64,18 @@ export class InputBoard extends React.Component<object, State> {
     )
   }
 
-  updateValidation() {
+  handleSubmit(event: React.FormEvent): void {
+    event.preventDefault()
+    const board = this.state.board.toJS()
+    const solver = new SudokuSolver()
+    console.log(solver.solve(board))
+  }
+
+  updateValidation(): void {
     // Resets the invalid rows, columns and blocks for revalidation
     this.setState({
       invalid: fromJS(initialState.invalid),
+      isValid: true,
     })
 
     // Row validation.
@@ -74,16 +84,12 @@ export class InputBoard extends React.Component<object, State> {
       for (let column = 0; column < 9; column++) {
         if (rowArr[column] !== '') {
           if (rowArr.indexOf(rowArr[column]) !== column) {
-            this.setState(
-              ({ invalid }) => {
-                return {
-                  invalid: invalid.set('row', invalid.get('row').add(row)),
-                }
-              },
-              () => {
-                console.log(this.state.invalid.get('row').toJS())
+            this.setState(({ invalid }) => {
+              return {
+                invalid: invalid.set('row', invalid.get('row').add(row)),
+                isValid: false,
               }
-            )
+            })
           }
         }
       }
@@ -98,19 +104,15 @@ export class InputBoard extends React.Component<object, State> {
           if (columnArr.includes(testValue) === false) {
             columnArr.push(testValue)
           } else {
-            this.setState(
-              ({ invalid }) => {
-                return {
-                  invalid: invalid.set(
-                    'column',
-                    invalid.get('column').add(column)
-                  ),
-                }
-              },
-              () => {
-                console.log(this.state.invalid.get('column').toJS())
+            this.setState(({ invalid }) => {
+              return {
+                invalid: invalid.set(
+                  'column',
+                  invalid.get('column').add(column)
+                ),
+                isValid: false,
               }
-            )
+            })
           }
         }
       }
@@ -127,19 +129,12 @@ export class InputBoard extends React.Component<object, State> {
           if (blockArr.includes(testValue) === false) {
             blockArr.push(testValue)
           } else {
-            this.setState(
-              ({ invalid }) => {
-                return {
-                  invalid: invalid.set(
-                    'block',
-                    invalid.get('block').add(block)
-                  ),
-                }
-              },
-              () => {
-                console.log(this.state.invalid.get('block').toJS())
+            this.setState(({ invalid }) => {
+              return {
+                invalid: invalid.set('block', invalid.get('block').add(block)),
+                isValid: false,
               }
-            )
+            })
           }
         }
       }
@@ -159,7 +154,7 @@ export class InputBoard extends React.Component<object, State> {
 
   render() {
     return (
-      <form className="board">
+      <form className="board" onSubmit={e => this.handleSubmit(e)}>
         {this.state.board.map((row, rowNumber) => {
           return (
             <div key={rowNumber} className="row">
@@ -180,6 +175,7 @@ export class InputBoard extends React.Component<object, State> {
             </div>
           )
         })}
+        <button type="submit" disabled={!this.state.isValid}>Solve</button>
       </form>
     )
   }

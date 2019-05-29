@@ -33,17 +33,18 @@ export class SudokuSolver {
   }
 
   public solve(input: number[][]): string {
-    this.populateBoard(input);
-    const result: string = '';
+    // this.populateBoard(input);
+    // const result: string = '';
 
-    while(this.status === 'forward' || this.status === 'backward') {
-      if (this.status === 'forward') {
+    // while(this.status === 'forward' || this.status === 'backward') {
+    //   if (this.status === 'forward') {
 
-      } else {
+    //   } else {
         
-      }
-    }
+    //   }
+    // }
 
-    return result;
+    // return result;
+    return "This is working"
   }
 }
