@@ -26,6 +26,27 @@ abstract class Board {
 
     return score
   }
+
+  public print(): string {
+    let result = ''
+    this.board.forEach(row => {
+      result += row.join('') + '\n'
+    })
+
+    return result
+  }
+
+  public toString(): string[][] {
+    const result = []
+    for (let row = 0; row < 9; row++) {
+      result.push([])
+      for (let column = 0; column < 9; column++) {
+        result[row].push(this.board[row][column].toString())
+      }
+    }
+
+    return result
+  }
 }
 
 export class SudokuBoard extends Board {
@@ -35,8 +56,10 @@ export class SudokuBoard extends Board {
 
   // Sets cell to provided number and returns a function to undo this action
   public add(row: number, column: number, value: number): HistoryFunction {
-    this.board[row][column] = value
-    return () => this.remove(row, column)
+    if (this.board[row][column] === 0) {
+      this.board[row][column] = value
+      return () => this.remove(row, column)
+    }
   }
 
   //  Sets cell back to zero.

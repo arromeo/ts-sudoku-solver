@@ -67,7 +67,10 @@ export class InputBoard extends React.Component<object, State> {
   handleSubmit(event: React.FormEvent): void {
     event.preventDefault()
     const solver = new SudokuSolver()
-    solver.solve(this.state.board.toJS())
+    const solved = solver.solve(this.state.board.toJS())
+    this.setState({
+      board: fromJS(solved),
+    })
   }
 
   updateValidation(): void {
@@ -174,7 +177,9 @@ export class InputBoard extends React.Component<object, State> {
             </div>
           )
         })}
-        <button type="submit" disabled={!this.state.isValid}>Solve</button>
+        <button type="submit" disabled={!this.state.isValid}>
+          Solve
+        </button>
       </form>
     )
   }

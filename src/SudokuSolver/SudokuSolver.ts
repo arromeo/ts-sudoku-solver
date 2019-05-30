@@ -33,15 +33,13 @@ export class SudokuSolver {
             this.solveMatrix.add(row, column, newValue - 1)
           )
           this.boardHistory.add(this.mainBoard.add(row, column, newValue))
-        } else {
         }
       })
     })
   }
 
-  public solve(input: string[][]): string {
+  public solve(input: string[][]): string[][] {
     this.populateBoard(input)
-
     while (this.status === 'forward' || this.status === 'backward') {
       if (this.status === 'forward') {
         let nextItem = this.solveMatrix.getSolvableItem()
@@ -59,7 +57,7 @@ export class SudokuSolver {
                 this.mainBoard.add(
                   nextItem.unitValue,
                   nextItem.solutions[0],
-                  nextItem.value
+                  nextItem.value + 1
                 )
               )
               break
@@ -75,7 +73,7 @@ export class SudokuSolver {
                 this.mainBoard.add(
                   nextItem.solutions[0],
                   nextItem.unitValue,
-                  nextItem.value
+                  nextItem.value + 1
                 )
               )
               break
@@ -103,7 +101,7 @@ export class SudokuSolver {
                     nextItem.unitValue,
                     nextItem.solutions[0]
                   ),
-                  nextItem.value
+                  nextItem.value + 1
                 )
               )
               break
@@ -113,10 +111,14 @@ export class SudokuSolver {
         } else {
           this.status = 'solveCheck'
         }
-      } else {
-      }
+      } 
     }
-    console.log(this.mainBoard.board)
-    return this.mainBoard.score().toString()
+    if (this.mainBoard.score() === 405) {
+      this.status = 'solved'
+    } else {
+      this.status = 'unsolvable'
+    }
+    console.log(this.status)
+    return this.mainBoard.toString()
   }
 }
