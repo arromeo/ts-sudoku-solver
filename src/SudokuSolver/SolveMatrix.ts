@@ -27,10 +27,7 @@ export class SolveMatrix {
 
     // Sets the cell as unusable in every board
     for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[boardNumber].add(
-        row,
-        column
-      )
+      const result: HistoryFunction | undefined = this.matrix[boardNumber].add(row, column)
       if (result !== undefined) {
         history.push(result)
       }
@@ -38,10 +35,7 @@ export class SolveMatrix {
 
     // Sets the row of the incoming value as unusable
     for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[value].add(
-        row,
-        columnNumber
-      )
+      const result: HistoryFunction | undefined = this.matrix[value].add(row, columnNumber)
       if (result !== undefined) {
         history.push(result)
       }
@@ -49,10 +43,7 @@ export class SolveMatrix {
 
     // Sets the column of the incoming value as unusable
     for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[value].add(
-        rowNumber,
-        column
-      )
+      const result: HistoryFunction | undefined = this.matrix[value].add(rowNumber, column)
       if (result !== undefined) {
         history.push(result)
       }
@@ -72,73 +63,51 @@ export class SolveMatrix {
     return history
   }
 
-  public getSolvableItem(): SolvableItem {
-    // Attempting to locate a row, column or block with one possible spot
+  public getSolvableItem(): SolvableItem | undefined {
+    const boardTypes: BoardUnit[] = ['row', 'column', 'block']
+    let row: number, column: number
+    for (let maxSolutions = 1; maxSolutions < 3; maxSolutions++) {
+      for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+        for (let iType = 0; iType < 3; iType++) {
+          let type: BoardUnit = boardTypes[iType]
+          for (let iOuter = 0; iOuter < 9; iOuter++) {
+            let hits: number[] = []
+            for (let iInner = 0; iInner < 9; iInner++) {
+              switch (type) {
+                case 'row':
+                  row = iOuter
+                  column = iInner
+                  break
+                case 'column':
+                  row = iInner
+                  column = iOuter
+                  break
+                case 'block':
+                  row = BlockHelpers.blockToRow(iOuter, iInner)
+                  column = BlockHelpers.blockToRow(iOuter, iInner)
+              }
 
-    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
-      for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-        let hits: number[] = []
-        for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
-            hits.push(columnNumber)
-          }
-        }
-
-        if (hits.length === 1) {
-          return {
-            value: boardNumber,
-            unitType: 'row',
-            unitValue: rowNumber,
-            solutions: hits,
-          }
-        }
-      }
-
-      for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-        let hits: number[] = []
-        for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
-            hits.push(rowNumber)
-            if (hits.length > 1) {
-              break
+              if (this.matrix[boardNumber].board[row][column] === 1) {
+                hits.push(iInner)
+                if (hits.length > maxSolutions) {
+                  break
+                }
+              }
             }
-          }
-        }
 
-        if (hits.length === 1) {
-          return {
-            value: boardNumber,
-            unitType: 'column',
-            unitValue: columnNumber,
-            solutions: hits,
-          }
-        }
-      }
-
-      for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
-        let hits: number[] = []
-        for (let positionNumber = 0; positionNumber < 9; positionNumber++) {
-          if (
-            this.matrix[boardNumber].board[
-              BlockHelpers.blockToRow(blockNumber, positionNumber)
-            ][BlockHelpers.blockToColumn(blockNumber, positionNumber)] === 1
-          ) {
-            hits.push(positionNumber)
-            if (hits.length > 1) {
-              break
+            if (hits.length === maxSolutions) {
+              return {
+                value: boardNumber,
+                unitType: type,
+                unitValue: iOuter,
+                solutions: hits,
+              }
             }
-          }
-        }
-
-        if (hits.length === 1) {
-          return {
-            value: boardNumber,
-            unitType: 'block',
-            unitValue: blockNumber,
-            solutions: hits,
           }
         }
       }
     }
+    // If no solutions were found, return undefined
+    return undefined
   }
 }

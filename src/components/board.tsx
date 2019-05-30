@@ -68,9 +68,13 @@ export class InputBoard extends React.Component<object, State> {
     event.preventDefault()
     const solver = new SudokuSolver()
     const solved = solver.solve(this.state.board.toJS())
-    this.setState({
-      board: fromJS(solved),
-    })
+    if (solved[0][0] !== '0') {
+      this.setState({
+        board: fromJS(solved),
+      })
+    } else {
+      console.log('unsolvable puzzle')
+    }
   }
 
   updateValidation(): void {

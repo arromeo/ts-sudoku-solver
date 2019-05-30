@@ -119,6 +119,7 @@ export class SudokuSolver {
       this.status = 'unsolvable'
     }
     console.log(this.status)
+    console.log(this.mainBoard.print())
     return this.mainBoard.toString()
   }
 }
