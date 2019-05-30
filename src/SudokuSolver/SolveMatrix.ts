@@ -72,30 +72,12 @@ export class SolveMatrix {
     return history
   }
 
+  public getSingleBoard(): number[][] {
+    return this.matrix[5].board
+  }
+
   public getSolvableItem(): SolvableItem {
     // Attempting to locate a row, column or block with one possible spot
-    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
-      for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-        let hits: number[] = []
-        for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
-            hits.push(columnNumber)
-            if (hits.length > 1) {
-              break
-            }
-          }
-        }
-
-        if (hits.length === 1) {
-          return {
-            value: boardNumber,
-            unitType: 'row',
-            unitValue: rowNumber,
-            solutions: hits,
-          }
-        }
-      }
-    }
 
     for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
       for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
@@ -121,6 +103,29 @@ export class SolveMatrix {
     }
 
     for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
+      for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
+        let hits: number[] = []
+        for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
+          if (this.matrix[boardNumber].board[rowNumber][columnNumber] === 1) {
+            hits.push(columnNumber)
+            if (hits.length > 1) {
+              break
+            }
+          }
+        }
+
+        if (hits.length === 1) {
+          return {
+            value: boardNumber,
+            unitType: 'row',
+            unitValue: rowNumber,
+            solutions: hits,
+          }
+        }
+      }
+    }
+
+    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
       for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
         let hits: number[] = []
         for (let positionNumber = 0; positionNumber < 9; positionNumber++) {
@@ -137,14 +142,6 @@ export class SolveMatrix {
         }
 
         if (hits.length === 1) {
-          console.log(
-            'Value: ' +
-              boardNumber +
-              ' Block: ' +
-              blockNumber +
-              ' Position: ' +
-              hits[0]
-          )
           return {
             value: boardNumber,
             unitType: 'block',

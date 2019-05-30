@@ -6,15 +6,15 @@ import { SudokuSolver } from '../SudokuSolver/SudokuSolver'
 
 const initialState = {
   board: List([
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '', '', '', '', '']),
+    List(['1', '', '4', '', '6', '8', '', '', '5']),
+    List(['9', '6', '', '', '7', '', '4', '', '3']),
+    List(['', '3', '', '9', '', '4', '1', '6', '']),
+    List(['', '', '', '6', '', '2', '5', '7', '1']),
+    List(['6', '8', '1', '', '', '5', '', '4', '']),
+    List(['', '2', '5', '1', '', '9', '', '3', '']),
+    List(['', '', '6', '8', '5', '3', '', '', '4']),
+    List(['4', '1', '', '', '9', '', '3', '', '8']),
+    List(['8', '', '3', '', '1', '', '6', '9', '']),
   ]),
   invalid: Map({
     row: Set([]),
@@ -66,9 +66,8 @@ export class InputBoard extends React.Component<object, State> {
 
   handleSubmit(event: React.FormEvent): void {
     event.preventDefault()
-    const board = this.state.board.toJS()
     const solver = new SudokuSolver()
-    solver.solve(board)
+    solver.solve(this.state.board.toJS())
   }
 
   updateValidation(): void {
