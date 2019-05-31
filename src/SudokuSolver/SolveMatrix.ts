@@ -1,5 +1,5 @@
 import { PossibilityBoard } from './Board'
-import { HistoryFunction } from './BoardHistory'
+import { HistoryItem } from './BoardHistory'
 import * as BlockHelpers from '../utils/blockHelpers'
 
 export type BoardUnit = 'row' | 'column' | 'block'
@@ -12,7 +12,7 @@ export interface SolvableItem {
 }
 
 export class SolveMatrix {
-  private matrix: PossibilityBoard[]
+  public matrix: PossibilityBoard[]
 
   constructor() {
     this.matrix = []
@@ -21,13 +21,13 @@ export class SolveMatrix {
     }
   }
 
-  public add(row: number, column: number, value: number): HistoryFunction[] {
-    const history: HistoryFunction[] = []
+  public add(row: number, column: number, value: number): HistoryItem[] {
+    const history: HistoryItem[] = []
     const block = BlockHelpers.positionToBlock(row, column)
 
     // Sets the cell as unusable in every board
     for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[boardNumber].add(row, column)
+      const result: HistoryItem | undefined = this.matrix[boardNumber].add(row, column, boardNumber)
       if (result !== undefined) {
         history.push(result)
       }
@@ -35,7 +35,7 @@ export class SolveMatrix {
 
     // Sets the row of the incoming value as unusable
     for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[value].add(row, columnNumber)
+      const result: HistoryItem | undefined = this.matrix[value].add(row, columnNumber, value)
       if (result !== undefined) {
         history.push(result)
       }
@@ -43,7 +43,7 @@ export class SolveMatrix {
 
     // Sets the column of the incoming value as unusable
     for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-      const result: HistoryFunction | undefined = this.matrix[value].add(rowNumber, column)
+      const result: HistoryItem | undefined = this.matrix[value].add(rowNumber, column, value)
       if (result !== undefined) {
         history.push(result)
       }
@@ -51,22 +51,27 @@ export class SolveMatrix {
 
     // Sets the block of the incoming value as unusable
     for (let blockPosition = 0; blockPosition < 9; blockPosition++) {
-      const result: HistoryFunction | undefined = this.matrix[value].add(
+      const result: HistoryItem | undefined = this.matrix[value].add(
         BlockHelpers.blockToRow(block, blockPosition),
-        BlockHelpers.blockToColumn(block, blockPosition)
+        BlockHelpers.blockToColumn(block, blockPosition),
+        value
       )
       if (result !== undefined) {
         history.push(result)
       }
     }
-
+    
     return history
+  }
+
+  public remove(row: number, column: number, value: number) {
+    this.matrix[value].remove(row, column)
   }
 
   public getSolvableItem(): SolvableItem | undefined {
     const boardTypes: BoardUnit[] = ['row', 'column', 'block']
     let row: number, column: number
-    for (let maxSolutions = 1; maxSolutions < 3; maxSolutions++) {
+    for (let maxSolutions = 1; maxSolutions < 4; maxSolutions++) {
       for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
         for (let iType = 0; iType < 3; iType++) {
           let type: BoardUnit = boardTypes[iType]

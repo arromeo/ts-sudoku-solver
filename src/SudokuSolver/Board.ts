@@ -1,4 +1,4 @@
-import { HistoryFunction } from './BoardHistory'
+import { HistoryItem } from './BoardHistory'
 
 abstract class Board {
   public board: number[][]
@@ -55,10 +55,16 @@ export class SudokuBoard extends Board {
   }
 
   // Sets cell to provided number and returns a function to undo this action
-  public add(row: number, column: number, value: number): HistoryFunction {
+  public add(row: number, column: number, value: number): HistoryItem {
     if (this.board[row][column] === 0) {
       this.board[row][column] = value
-      return () => this.remove(row, column)
+      return {
+        row: row,
+        column: column,
+        value: value,
+        boardType: 'main',
+        ghost: false,
+      }
     }
   }
 
@@ -74,10 +80,16 @@ export class PossibilityBoard extends Board {
   }
 
   // Sets cell as unusable and returns a function to undo this action.
-  public add(row: number, column: number): HistoryFunction | undefined {
+  public add(row: number, column: number, value: number): HistoryItem | undefined {
     if (this.board[row][column] === 1) {
       this.board[row][column] = 0
-      return () => this.remove(row, column)
+      return {
+        row: row,
+        column: column,
+        value: value,
+        boardType: 'possibility',
+        ghost: false,
+      }
     } else {
       return undefined
     }
