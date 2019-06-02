@@ -25,42 +25,27 @@ export class SolveMatrix {
     const history: HistoryItem[] = []
     const block = BlockHelpers.positionToBlock(row, column)
 
-    // Sets the cell as unusable in every board
-    for (let boardNumber = 0; boardNumber < 9; boardNumber++) {
-      const result: HistoryItem | undefined = this.matrix[boardNumber].add(row, column, boardNumber)
-      if (result !== undefined) {
-        history.push(result)
-      }
-    }
+    let result: HistoryItem | undefined
 
-    // Sets the row of the incoming value as unusable
-    for (let columnNumber = 0; columnNumber < 9; columnNumber++) {
-      const result: HistoryItem | undefined = this.matrix[value].add(row, columnNumber, value)
-      if (result !== undefined) {
-        history.push(result)
-      }
-    }
+    // Sets cells in possibility boards as unusable
+    for (let i = 0; i < 9; i++) {
+      result = this.matrix[i].add(row, column, i)
+      result && history.push(result)
 
-    // Sets the column of the incoming value as unusable
-    for (let rowNumber = 0; rowNumber < 9; rowNumber++) {
-      const result: HistoryItem | undefined = this.matrix[value].add(rowNumber, column, value)
-      if (result !== undefined) {
-        history.push(result)
-      }
-    }
+      result = this.matrix[value].add(row, i, value)
+      result && history.push(result)
 
-    // Sets the block of the incoming value as unusable
-    for (let blockPosition = 0; blockPosition < 9; blockPosition++) {
-      const result: HistoryItem | undefined = this.matrix[value].add(
-        BlockHelpers.blockToRow(block, blockPosition),
-        BlockHelpers.blockToColumn(block, blockPosition),
+      result = this.matrix[value].add(i, column, value)
+      result && history.push(result)
+
+      result = this.matrix[value].add(
+        BlockHelpers.blockToRow(block, i),
+        BlockHelpers.blockToColumn(block, i),
         value
       )
-      if (result !== undefined) {
-        history.push(result)
-      }
+      result && history.push(result)
     }
-    
+
     return history
   }
 

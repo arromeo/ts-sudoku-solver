@@ -6,22 +6,22 @@ import { SudokuSolver } from '../SudokuSolver/SudokuSolver'
 
 const initialState = {
   board: List([
-    List(['4', '2', '', '', '', '', '', '', '']),
-    List(['', '', '', '', '8', '', '6', '', '']),
-    List(['', '', '', '6', '', '', '3', '', '']),
-    List(['', '1', '', '7', '', '2', '', '', '']),
-    List(['', '', '', '', '', '', '', '5', '']),
-    List(['', '', '', '', '', '', '4', '', '']),
-    List(['', '', '8', '3', '4', '', '', '', '']),
-    List(['5', '', '', '', '', '', '', '2', '']),
-    List(['', '', '', '', '', '', '', '', '1']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
+    List(['', '', '', '', '', '', '', '', '']),
   ]),
   invalid: Map({
     row: Set([]),
     column: Set([]),
     block: Set([]),
   }),
-  isValid: true,
+  isValid: false,
 }
 
 type State = Readonly<typeof initialState>
@@ -29,11 +29,7 @@ type State = Readonly<typeof initialState>
 export class InputBoard extends React.Component<object, State> {
   readonly state: State = initialState
 
-  handleChange(
-    event: React.ChangeEvent<HTMLInputElement>,
-    row: number,
-    column: number
-  ) {
+  handleChange(event: React.ChangeEvent<HTMLInputElement>, row: number, column: number) {
     // Limits how inputs are handled. Typing a number in an already occupied
     // cell replaces it with that number. Typing a non-number deletes what's
     // in the cell
@@ -84,6 +80,23 @@ export class InputBoard extends React.Component<object, State> {
       isValid: true,
     })
 
+    // 17 Clue Validation - This makes sure there are at least 17 clues
+    {
+      let clueTotal = 0
+      for (let row = 0; row < 9; row++) {
+        for (let column = 0; column < 9; column++) {
+          if (this.state.board.get(row).get(column) !== '') {
+            clueTotal++
+          }
+        }
+      }
+      if (clueTotal < 17) {
+        this.setState({
+          isValid: false,
+        })
+      }
+    }
+
     // Row validation.
     for (let row = 0; row < 9; row++) {
       let rowArr = this.state.board.get(row).toJS()
@@ -112,10 +125,7 @@ export class InputBoard extends React.Component<object, State> {
           } else {
             this.setState(({ invalid }) => {
               return {
-                invalid: invalid.set(
-                  'column',
-                  invalid.get('column').add(column)
-                ),
+                invalid: invalid.set('column', invalid.get('column').add(column)),
                 isValid: false,
               }
             })
@@ -152,39 +162,49 @@ export class InputBoard extends React.Component<object, State> {
     return (
       !this.state.invalid.get('row').includes(row) &&
       !this.state.invalid.get('column').includes(column) &&
-      !this.state.invalid
-        .get('block')
-        .includes(BlockHelpers.positionToBlock(row, column))
+      !this.state.invalid.get('block').includes(BlockHelpers.positionToBlock(row, column))
     )
+  }
+
+  //Clears the board
+  handleClear(event: React.MouseEvent): void {
+    event.preventDefault()
+    this.setState({
+      board: fromJS(initialState.board),
+    })
   }
 
   render() {
     return (
-      <form className="board" onSubmit={e => this.handleSubmit(e)}>
-        {this.state.board.map((row, rowNumber) => {
-          return (
-            <div key={rowNumber} className="row">
-              {row.map((value, columnNumber) => {
-                return (
-                  <Cell
-                    key={rowNumber + '-' + columnNumber}
-                    row={rowNumber}
-                    column={columnNumber}
-                    value={value}
-                    valid={this.isCellValid(rowNumber, columnNumber)}
-                    onchange={e =>
-                      this.handleChange(e, rowNumber, columnNumber)
-                    }
-                  />
-                )
-              })}
-            </div>
-          )
-        })}
-        <button type="submit" disabled={!this.state.isValid}>
-          Solve
-        </button>
-      </form>
+      <div className="board-container">
+        <h1 className="title">TypeScript Sudoku Solver</h1>
+        <form className="board" onSubmit={e => this.handleSubmit(e)}>
+          {this.state.board.map((row, rowNumber) => {
+            return (
+              <div key={rowNumber} className="row">
+                {row.map((value, columnNumber) => {
+                  return (
+                    <Cell
+                      key={rowNumber + '-' + columnNumber}
+                      row={rowNumber}
+                      column={columnNumber}
+                      value={value}
+                      valid={this.isCellValid(rowNumber, columnNumber)}
+                      onchange={e => this.handleChange(e, rowNumber, columnNumber)}
+                    />
+                  )
+                })}
+              </div>
+            )
+          })}
+          <button className="button" type="submit" disabled={!this.state.isValid}>
+            Solve
+          </button>
+          <button className="button" onClick={event => this.handleClear(event)}>
+            Clear
+          </button>
+        </form>
+      </div>
     )
   }
 }
