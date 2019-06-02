@@ -31,7 +31,7 @@ export class SudokuSolver {
     })
   }
 
-  public solve(input: string[][]): string[][] {
+  public solve(input: string[][]): string[][] | string {
     this.populateBoard(input)
     while (this.status === 'forward' || this.status === 'backward') {
       if (this.status === 'forward') {
@@ -128,7 +128,7 @@ export class SudokuSolver {
             this.status = 'forward'
           }
         } else {
-          this.status = 'unsolvable'
+          return 'We submitted the puzzle and the solver said no.'
         }
       }
     }

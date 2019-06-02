@@ -22,6 +22,7 @@ const initialState = {
     block: Set([]),
   }),
   isValid: false,
+  errorMessage: '',
 }
 
 type State = Readonly<typeof initialState>
@@ -64,12 +65,12 @@ export class InputBoard extends React.Component<object, State> {
     event.preventDefault()
     const solver = new SudokuSolver()
     const solved = solver.solve(this.state.board.toJS())
-    if (solved[0][0] !== '0') {
+    if (typeof solved === 'string') {
+      this.setState({ errorMessage: solved })
+    } else {
       this.setState({
         board: fromJS(solved),
       })
-    } else {
-      console.log('unsolvable puzzle')
     }
   }
 
@@ -78,6 +79,7 @@ export class InputBoard extends React.Component<object, State> {
     this.setState({
       invalid: fromJS(initialState.invalid),
       isValid: true,
+      errorMessage: '',
     })
 
     // 17 Clue Validation - This makes sure there are at least 17 clues
@@ -93,6 +95,7 @@ export class InputBoard extends React.Component<object, State> {
       if (clueTotal < 17) {
         this.setState({
           isValid: false,
+          errorMessage: 'Board needs at least 17 clues',
         })
       }
     }
@@ -197,12 +200,15 @@ export class InputBoard extends React.Component<object, State> {
               </div>
             )
           })}
-          <button className="button" type="submit" disabled={!this.state.isValid}>
-            Solve
-          </button>
-          <button className="button" onClick={event => this.handleClear(event)}>
-            Clear
-          </button>
+          <div className="error">{this.state.errorMessage}</div>
+          <div className="button-container">
+            <button className="button" type="submit" disabled={!this.state.isValid}>
+              Solve
+            </button>
+            <button className="button" onClick={event => this.handleClear(event)}>
+              Clear
+            </button>
+          </div>
         </form>
       </div>
     )
