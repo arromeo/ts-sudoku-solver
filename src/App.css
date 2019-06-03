@@ -14,8 +14,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 #board {
@@ -79,7 +79,8 @@
 
 .details {
   font-family: 'Permanent Marker', cursive;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  margin-top: 1rem;
 }
 
 @media (min-width: 600px) {
@@ -111,5 +112,10 @@
 
   .section-floor {
     border-bottom-width: 6px;
+  }
+
+  .details {
+    font-size: 1.2rem;
+    margin-top: 0rem;
   }
 }
