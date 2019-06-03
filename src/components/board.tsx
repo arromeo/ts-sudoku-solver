@@ -210,6 +210,7 @@ export class InputBoard extends React.Component<object, State> {
             </button>
           </div>
         </form>
+        <div className="details">Find out how this works at the <a href="https://github.com/arromeo/ts-sudoku-solver">Github Repo</a></div>
       </div>
     )
   }
