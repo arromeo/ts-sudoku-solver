@@ -1,44 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# TypeScript Sudoku Solver
 
-## Available Scripts
+As the title suggests, this project is a Sudoku puzzle solver built using TypeScript and React. I had built a similar project in Python last year, but have made some major improvements in this iteration including more solid OOP principles, proper puzzle validation with highlighting, generic functions that could handle updates to rows, columns or blocks rather than repeating loops, and helper functions to produce cleaner, more readable code.
 
-In the project directory, you can run:
+The main focus on this project was to learn and get comfortable with using TypeScript. I'm happy with how this project turned out, and it has really put a fire in my belly to update all of my projects with TypeScript and also has me more interested in exploring OOP languages like C# and Java.
 
-### `npm start`
+## Run Locally
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+To install this project locally you will need to have Node.js installed along with the npm package manager. You can find instructions for installing this for your respective OS [here](https://nodejs.org/en/download/package-manager/)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installing
 
-### `npm run build`
+1. Clone this project onto your local machine using the Git CLI or download the .zip file and extract the files into an empty directory.
+2. In a terminal, navigate to the folder containing the project files and run `npm install` to download and setup the project's dependencies.
+3. Run `npm start`. After building the project, a browser window should automatically pop up, but if not, the default URL is `http://localhost:3000`.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Built With
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+* [TypeScript](https://www.typescriptlang.org/docs/home.html) - Programming Language
+* [React](https://reactjs.org/docs/getting-started.html) - Front-end Framework
+* [Create React App](https://facebook.github.io/create-react-app/docs/getting-started) - Project Setup
+* [Immutable.js](https://immutable-js.github.io/immutable-js/docs/#/) - State Updating
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributing
 
-### `npm run eject`
+Being that this was my first attempt at a TypeScript project, I'm certain there are mistakes that were made and patterns that were missed. I would be very appreciative to hear some critical analysis of my code to help me be a better programmer and to improve faster.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Authors
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* **Adam Romeo** - *Everything* - [Portfolio](https://adamromeo.dev)
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Acknowledgments
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Jennifer Reynolds (my wife) for standing in as a rubber duck.
+* Savjee for producing a series on [TypeScript Design Patterns](https://www.youtube.com/playlist?list=PLzvRQMJ9HDiSk1pnrKewLklYfCdu9Qjhy).
