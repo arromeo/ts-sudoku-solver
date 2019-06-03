@@ -4,6 +4,8 @@ As the title suggests, this project is a Sudoku puzzle solver built using TypeSc
 
 The main focus on this project was to learn and get comfortable with using TypeScript. I'm happy with how this project turned out, and it has really put a fire in my belly to update all of my projects with TypeScript and also has me more interested in exploring OOP languages like C# and Java.
 
+**[See it in action!](https://arromeo.github.io/ts-sudoku-solver/)**
+
 ## How It Works
 
 The solver contains four main components. The visible board that the user interacts with, the main solver class, a history log of all changes made to the board and a container holding nine boards, one for every possible number on the bord.
