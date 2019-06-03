@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/ts-sudoku-solver/static/css/main.780df7e1.chunk.css",
+    "main.css": "/ts-sudoku-solver/static/css/main.2c2c289e.chunk.css",
     "main.js": "/ts-sudoku-solver/static/js/main.4decb8a0.chunk.js",
     "main.js.map": "/ts-sudoku-solver/static/js/main.4decb8a0.chunk.js.map",
     "runtime~main.js": "/ts-sudoku-solver/static/js/runtime~main.46b21b24.js",
@@ -8,8 +8,8 @@
     "static/js/2.6594e92e.chunk.js": "/ts-sudoku-solver/static/js/2.6594e92e.chunk.js",
     "static/js/2.6594e92e.chunk.js.map": "/ts-sudoku-solver/static/js/2.6594e92e.chunk.js.map",
     "index.html": "/ts-sudoku-solver/index.html",
-    "precache-manifest.7feeff7d29db35ff60869c1e30254f89.js": "/ts-sudoku-solver/precache-manifest.7feeff7d29db35ff60869c1e30254f89.js",
+    "precache-manifest.39975d83df26c9288f724d4dc4637634.js": "/ts-sudoku-solver/precache-manifest.39975d83df26c9288f724d4dc4637634.js",
     "service-worker.js": "/ts-sudoku-solver/service-worker.js",
-    "static/css/main.780df7e1.chunk.css.map": "/ts-sudoku-solver/static/css/main.780df7e1.chunk.css.map"
+    "static/css/main.2c2c289e.chunk.css.map": "/ts-sudoku-solver/static/css/main.2c2c289e.chunk.css.map"
   }
 }
