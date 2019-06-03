@@ -11,12 +11,14 @@ export class SudokuSolver {
   private boardHistory: BoardHistory
   private solveMatrix: SolveMatrix
   private status: StatusType
+  private totalRuns: number
 
   constructor() {
     this.mainBoard = new SudokuBoard()
     this.boardHistory = new BoardHistory()
     this.solveMatrix = new SolveMatrix()
     this.status = 'forward'
+    this.totalRuns = 0
   }
 
   private populateBoard(input: string[][]): void {
@@ -125,9 +127,16 @@ export class SudokuSolver {
           } else {
             this.boardHistory.merge(this.solveMatrix.add(action.row, action.column, action.value))
             this.boardHistory.add(this.mainBoard.add(action.row, action.column, action.value + 1))
+            this.totalRuns++
+            console.log(this.totalRuns)
             this.status = 'forward'
+            if (this.totalRuns > 1000) {
+              console.log('setting to unsolvable')
+              return 'Looked into infinity and didn\'t see an answer.'
+            }
           }
         } else {
+          this.status = 'unsolvable'
           return 'We submitted the puzzle and the solver said no.'
         }
       }

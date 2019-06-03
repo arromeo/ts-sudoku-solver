@@ -40,4 +40,10 @@ export class BoardHistory {
   public get(): HistoryItem | undefined {
     return this.history.pop()
   }
+
+  public ghostCount(): number {
+    return this.history.filter(item => {
+      return item.ghost === true
+    }).length
+  }
 }

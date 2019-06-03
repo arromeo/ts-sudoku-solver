@@ -74,7 +74,7 @@ export class SolveMatrix {
                   break
                 case 'block':
                   row = BlockHelpers.blockToRow(iOuter, iInner)
-                  column = BlockHelpers.blockToRow(iOuter, iInner)
+                  column = BlockHelpers.blockToColumn(iOuter, iInner)
               }
 
               if (this.matrix[boardNumber].board[row][column] === 1) {
