@@ -25,10 +25,4 @@ export type EvaluatedBoard = {
   errorMessage?: BoardError;
 };
 
-export type HistoryItem = Cell;
-
-export type HistorySplit = Cell[];
-
-export type History = (HistoryItem | HistorySplit)[];
-
 export type UnitEnum = 'row' | 'column' | 'block';

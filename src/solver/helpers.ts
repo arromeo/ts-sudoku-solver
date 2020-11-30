@@ -9,6 +9,8 @@ import { CellCoordinates, UnitEnum } from './types';
  * @param unitIndex - Index of that type in relation to the board
  * @param cellIndex - Index of cell within that unit
  * @returns - Board coordinates
+ * 
+ * @private
  */
 export function translateToCoordinates(
   unit: UnitEnum,
