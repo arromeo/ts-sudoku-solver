@@ -50,16 +50,3 @@ To install this project locally you will need to have Node.js installed along wi
 * [React](https://reactjs.org/docs/getting-started.html) - Front-end Framework
 * [Create React App](https://facebook.github.io/create-react-app/docs/getting-started) - Project Setup
 * [Immutable.js](https://immutable-js.github.io/immutable-js/docs/#/) - State Updating
-
-## Contributing
-
-Being that this was my first attempt at a TypeScript project, I'm certain there are mistakes that were made and patterns that were missed. I would be very appreciative to hear some critical analysis of my code to help me be a better programmer and to improve faster.
-
-## Authors
-
-* **Adam Romeo** - *Everything* - [Portfolio](https://adamromeo.dev)
-
-## Acknowledgments
-
-* Jennifer Reynolds (my wife) for standing in as a rubber duck.
-* Savjee for producing a series on [TypeScript Design Patterns](https://www.youtube.com/playlist?list=PLzvRQMJ9HDiSk1pnrKewLklYfCdu9Qjhy).
